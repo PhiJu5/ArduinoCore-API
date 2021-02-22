@@ -41,6 +41,7 @@ namespace arduino {
 #define SERIAL_DATA_6        (0x200ul)
 #define SERIAL_DATA_7        (0x300ul)
 #define SERIAL_DATA_8        (0x400ul)
+#define SERIAL_DATA_9        (0x500ul)
 #define SERIAL_DATA_MASK     (0xF00ul)
 
 #define SERIAL_5N1           (SERIAL_STOP_BIT_1 | SERIAL_PARITY_NONE  | SERIAL_DATA_5)
@@ -83,7 +84,12 @@ namespace arduino {
 #define SERIAL_6S2           (SERIAL_STOP_BIT_2 | SERIAL_PARITY_SPACE | SERIAL_DATA_6)
 #define SERIAL_7S2           (SERIAL_STOP_BIT_2 | SERIAL_PARITY_SPACE | SERIAL_DATA_7)
 #define SERIAL_8S2           (SERIAL_STOP_BIT_2 | SERIAL_PARITY_SPACE | SERIAL_DATA_8)
-
+#define SERIAL_9N1           (SERIAL_STOP_BIT_1 | SERIAL_PARITY_NONE  | SERIAL_DATA_9)
+#define SERIAL_9N2           (SERIAL_STOP_BIT_2 | SERIAL_PARITY_NONE  | SERIAL_DATA_9)
+#define SERIAL_9E1           (SERIAL_STOP_BIT_1 | SERIAL_PARITY_EVEN  | SERIAL_DATA_9)
+#define SERIAL_9E2           (SERIAL_STOP_BIT_2 | SERIAL_PARITY_EVEN  | SERIAL_DATA_9)
+#define SERIAL_9O1           (SERIAL_STOP_BIT_1 | SERIAL_PARITY_ODD   | SERIAL_DATA_9)
+#define SERIAL_9O2           (SERIAL_STOP_BIT_2 | SERIAL_PARITY_ODD   | SERIAL_DATA_9)
 class HardwareSerial : public Stream
 {
   public:
@@ -97,6 +103,9 @@ class HardwareSerial : public Stream
     virtual size_t write(uint8_t) = 0;
     using Print::write; // pull in write(str) and write(buf, size) from Print
     virtual operator bool() = 0;
+	virtual size_t write9bit(uint8_t) = 0;
+	virtual void set_tx_mode(void) = 0;
+	virtual void set_rx_mode(void) = 0;
 };
 
 // XXX: Are we keeping the serialEvent API?
