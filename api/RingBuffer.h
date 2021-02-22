@@ -36,14 +36,14 @@ template <int N>
 class RingBufferN
 {
   public:
-    uint8_t _aucBuffer[N] ;
+    uint16_t _aucBuffer[N] ;
     volatile int _iHead ;
     volatile int _iTail ;
     volatile int _numElems;
 
   public:
     RingBufferN( void ) ;
-    void store_char( uint8_t c ) ;
+    void store_char( uint16_t c ) ;
     void clear();
     int read_char();
     int available();
@@ -62,12 +62,12 @@ typedef RingBufferN<SERIAL_BUFFER_SIZE> RingBuffer;
 template <int N>
 RingBufferN<N>::RingBufferN( void )
 {
-    memset( _aucBuffer, 0, N ) ;
+    memset( _aucBuffer, 0, (N * 2) ) ;
     clear();
 }
 
 template <int N>
-void RingBufferN<N>::store_char( uint8_t c )
+void RingBufferN<N>::store_char( uint16_t c )
 {
   // if we should be storing the received character into the location
   // just before the tail (meaning that the head would advance to the
@@ -95,7 +95,7 @@ int RingBufferN<N>::read_char()
   if (isEmpty())
     return -1;
 
-  uint8_t value = _aucBuffer[_iTail];
+  uint16_t value = _aucBuffer[_iTail];
   _iTail = nextIndex(_iTail);
   _numElems--;
 
